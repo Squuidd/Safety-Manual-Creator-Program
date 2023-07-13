@@ -74,10 +74,12 @@ def SetDisplay():
 
 # Replaces characters that are not compatible with xml
 def fix_name(company_name):
-    company_name = company_name.replace("&", "&amp;") #&#38;
-    company_name = company_name.replace("<", "&lt;")
-    company_name = company_name.replace(">", "&gt;")
-
+    try:
+        company_name = company_name.replace("&", "&amp;") #&#38;
+        company_name = company_name.replace("<", "&lt;")
+        company_name = company_name.replace(">", "&gt;")
+    except:
+        pass
 
     return company_name
 
@@ -147,13 +149,16 @@ try:
 
         # Move stuff around
         elif event in ["selected_not", "selected"]:
-            item = values[event][0]
-            if event == "selected_not":
-                In_List.remove(item)
-                Out_List.append(item)
-            else:
-                In_List.append(item)
-                Out_List.remove(item)
+            try:
+                item = values[event][0]
+                if event == "selected_not":
+                    In_List.remove(item)
+                    Out_List.append(item)
+                else:
+                    In_List.append(item)
+                    Out_List.remove(item)
+            except:
+                pass
 
             SetDisplay()
 

@@ -1,44 +1,52 @@
 import PySimpleGUI as sg
 
 WINDOW_NAME = "Safety Manual Creator"
-
+font = ("Arial", 14)
+white_space = '                                                                                                                  '
 
 def main(_in):
+    
     search = [
         [
-            sg.InputText(key="refine", enable_events=True, ),
+            sg.InputText(key="refine", enable_events=True, size=(400, 90), font=font),
         ]
     ]
     name = [
         [
-            sg.InputText(key="name", ),
+            sg.InputText(key="name", size=(400, 90), font=font),
         ]
     ]
     Layout = [
+        [
+            sg.Text(f"Unselected {white_space}", font=font), 
+            sg.Text("Selected", font=font)
+        ],
         [
             sg.Listbox(
                 values=_in,
                 key="selected_not",
                 change_submits=True,
-                size=(50, 20)
+                size=(60, 30), #50, 20,
+                font=font
             ),
             sg.Listbox(
                 values=[],
                 key="selected",
                 change_submits=True,
-                size=(50, 20)
+                size=(60, 30), #50, 20
+                font=font
             )
         ],
         [
-            sg.Frame("Search", layout=search),
-            sg.Frame("Company Name", layout=name)
+            sg.Frame("Search", layout=search, size=(500, 60), font=font),
+            sg.Frame("Company Name", layout=name, size=(500, 60), font=font)
 
         ],
         [
-            sg.Button("Create Safety Programs", key="create_program"),
-            sg.Button("Create Safety Manuals", key="create_manual"),
-            sg.Button("Set directorys/files", key="set"), # Phase this out. Package docs?
-            sg.Button("How to use.", key="how_to")
+            sg.Button("Create Safety Programs", key="create_program", font=font),
+            sg.Button("Create Safety Manuals", key="create_manual", font=font),
+            # sg.Button("Set directorys/files", key="set", font=font), # Phase this out. Package docs?
+            sg.Button("How to use.", key="how_to", font=font)
         ],
     ]
     # Create the Window
@@ -51,8 +59,8 @@ def set(config):
         window.Element("input_program").update(config["program"])
 
 
-    space = 12
-    wide = 35
+    space = 12 
+    wide = 35 
     remote = [
         [
             sg.Text("Program Folder", size=(space, 0)),
@@ -93,7 +101,7 @@ def set(config):
                 if config["manual"] and config["program"]:
                     running = False
                 else:
-                    sg.PopupOK("All fields must be entered before proceeding")
+                    sg.PopupOK("All fields must be entered before proceeding", font=font)
 
             
 
@@ -106,11 +114,11 @@ def set(config):
 def file_select():
     Layout = [
         [
-            sg.InputText(visible=True, key='fig_path', size=(35, 0)), sg.FileBrowse("Select file"),
+            sg.InputText(visible=True, key='fig_path', size=(35, 0), font=font), sg.FileBrowse("Select file", font=font),
 
         ],
         [
-            sg.Button("Done", key="done")
+            sg.Button("Done", key="done", font=font)
         ]
     ]
     window = sg.Window(WINDOW_NAME, Layout)
@@ -131,11 +139,11 @@ def file_select():
 def folder_select():
     Layout = [
         [
-            sg.InputText(visible=True, key='fig_path', size=(35, 0)), sg.FolderBrowse("Select Folder"),
+            sg.InputText(visible=True, key='fig_path', size=(35, 0), font=font), sg.FolderBrowse("Select Folder", font=font),
 
         ],
         [
-            sg.Button("Done", key="done")
+            sg.Button("Done", key="done", font=font)
         ]
     ]
     window = sg.Window(WINDOW_NAME, Layout)
@@ -157,16 +165,17 @@ def save_as(type):
     
     Layout = [
         [
-            sg.InputText(visible=True, key='fig_path', size=(35, 0)),
+            sg.InputText(visible=True, key='fig_path', size=(35, 0), font=font),
             sg.FileSaveAs(
                 key='fig_path',
                 file_types=type,  # TODO: better names
                 # (('PNG', '.png'), ('JPG', '.jpg'))
+                font=font
             ),
 
         ],
         [
-            sg.Button("Done", key="done")
+            sg.Button("Done", key="done", font=font)
         ]
     ]
     window = sg.Window(WINDOW_NAME, Layout)
@@ -184,7 +193,7 @@ def save_as(type):
     return path
 
 def how_to(): # Displays the How To Use page
-    layout = [[sg.Text("Here is how to operate the Safety Manual Creator software.", key="how_to_dialogue")]]
+    layout = [[sg.Text("Here is how to operate the Safety Manual Creator software.", key="how_to_dialogue", font=font)]]
     window = sg.Window("How To Use", layout)
     while True:
         event, values = window.read()
@@ -205,7 +214,7 @@ class StickyPopup:
 class StickyLoading:
     def __init__(self, max):
         self.window = sg.Window("",
-                                layout=[[sg.ProgressBar(max_value=max, orientation='h', size=(20, 20), key='loading')]],
+                                layout=[[sg.ProgressBar(max_value=max, orientation='h', size=(50, 50), key='loading')]], #20, 20
                                 no_titlebar=True, keep_on_top=True)
         self.window.read(timeout=0)  # immediately read
         self.value = 0
