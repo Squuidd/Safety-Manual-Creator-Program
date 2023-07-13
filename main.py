@@ -74,10 +74,10 @@ def SetDisplay():
 
 # Replaces characters that are not compatible with xml
 def fix_name(company_name):
-    
-    company_name.replace("&", "TEST") #&#38;
-    company_name.replace("<", "&lt;")
-    company_name.replace(">", "&gt;")
+    company_name = company_name.replace("&", "&amp;") #&#38;
+    company_name = company_name.replace("<", "&lt;")
+    company_name = company_name.replace(">", "&gt;")
+
 
     return company_name
 
@@ -92,8 +92,10 @@ try:
     window = wd.main(In_List)
     while True:
         event, values = window.read()
-        company_name = fix_name(values["name"])
-        print(company_name)
+
+        if values:
+            company_name = fix_name(values["name"])
+
         if event == sg.WIN_CLOSED:
             break
 
